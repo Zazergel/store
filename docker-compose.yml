@@ -1,0 +1,42 @@
+version: '3.8'
+services:
+  supplier:
+    build: ./supplier
+    container_name: supplier
+    restart: on-failure
+    ports:
+      - "8080:8080"
+    depends_on:
+      - consumer
+    environment:
+      - CONSUMER_SERVICE_URL=http://consumer:9090
+
+  consumer:
+    build: ./consumer
+    container_name: consumer_service
+    ports:
+      - "9090:9090"
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/store
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+    volumes:
+      - ./consumer/scr/main/resources:/docker-entrypoint-initdb.d
+
+  db:
+    image: postgres:15.1-alpine
+    container_name: store-db
+    restart: on-failure
+    ports:
+      - "6541:5432"
+    volumes:
+      - db-data:/var/lib/postgres/data
+    environment:
+      - POSTGRES_DB=store
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+
+volumes:
+  db-data:
