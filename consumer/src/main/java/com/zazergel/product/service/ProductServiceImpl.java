@@ -65,8 +65,7 @@ public class ProductServiceImpl implements ProductService {
     public ProductDto add(ProductDto productDto) {
         log.info("Создание продукта {}.", productDto);
 
-        Category category = categoryRepo.findById(productDto.getCategoryId())
-                .orElseThrow(() -> new NotFoundException("Категории с таким id не существует!"));
+        Category category = getCategoryById(productDto.getCategoryId());
         Product product = productMapper.toProduct(productDto, category);
         return productMapper.toProductDto(productRepo.save(product));
     }
@@ -88,7 +87,7 @@ public class ProductServiceImpl implements ProductService {
             repoProduct.setPrice(productDto.getPrice());
         }
         if (productDto.getCategoryId() != null) {
-            repoProduct.setCategory(categoryRepo.findById(productDto.getCategoryId()).orElseThrow());
+            repoProduct.setCategory(getCategoryById(productDto.getCategoryId()));
         }
 
         return productMapper.toProductDto(productRepo.save(repoProduct));
@@ -137,7 +136,13 @@ public class ProductServiceImpl implements ProductService {
                 .orElseThrow(() -> new NotFoundException("Продукта с таким id не существует!"));
     }
 
-    private Page<ProductExtendedDto> getResult(List<Product> products, ProductSortType sort, Pageable pageable) {
+    private Category getCategoryById(Long id) {
+        return categoryRepo.findById(id)
+                .orElseThrow(() -> new NotFoundException("Категории с таким id не существует!"));
+    }
+
+    private Page<ProductExtendedDto> getResult(List<Product> products,
+                                               ProductSortType sort, Pageable pageable) {
         if (products.isEmpty()) {
             return Page.empty();
         }

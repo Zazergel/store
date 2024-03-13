@@ -19,6 +19,7 @@
         <mapstruct.version>1.5.3.Final</mapstruct.version>
         <spring.boot.version>3.2.3</spring.boot.version>
         <postgres.version>42.2.4</postgres.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <dependencies>

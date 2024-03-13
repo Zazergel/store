@@ -23,7 +23,7 @@ services:
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
     volumes:
-      - ./consumer/scr/main/resources:/docker-entrypoint-initdb.d
+      - ./consumer/src/main/resources:/docker-entrypoint-initdb.d
 
   db:
     image: postgres:15.1-alpine

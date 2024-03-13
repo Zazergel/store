@@ -1,6 +1,7 @@
 package com.zazergel;
 
 import com.zazergel.category.dto.CategoryDto;
+import com.zazergel.category.repository.CategoryRepo;
 import com.zazergel.category.service.CategoryService;
 import com.zazergel.product.dto.ProductDto;
 import com.zazergel.product.service.ProductService;
@@ -14,9 +15,12 @@ public class TestDataLoader implements CommandLineRunner {
     private final CategoryService categoryService;
     private final ProductService productService;
 
-    public TestDataLoader(CategoryService categoryService, ProductService productService) {
+    private final CategoryRepo categoryRepo;
+
+    public TestDataLoader(CategoryService categoryService, ProductService productService, CategoryRepo categoryRepo) {
         this.categoryService = categoryService;
         this.productService = productService;
+        this.categoryRepo = categoryRepo;
     }
 
     @Override
@@ -42,49 +46,49 @@ public class TestDataLoader implements CommandLineRunner {
                 .name("Апельсин")
                 .description("Сочный, спелый апельсин")
                 .price(10L)
-                .categoryId(1L)
+                .categoryId(getCategoryIdFromRepo("Фрукты"))
                 .build();
         ProductDto product2 = ProductDto.builder()
                 .name("Помидор")
                 .description("Красный, спелый помидор")
                 .price(8L)
-                .categoryId(2L)
+                .categoryId(getCategoryIdFromRepo("Овощи"))
                 .build();
         ProductDto product3 = ProductDto.builder()
                 .name("Молоток")
                 .description("Надежный инструмент")
                 .price(100L)
-                .categoryId(3L)
+                .categoryId(getCategoryIdFromRepo("Инструменты"))
                 .build();
         ProductDto product4 = ProductDto.builder()
                 .name("Яблочный сок")
                 .description("Осветленный")
                 .price(50L)
-                .categoryId(4L)
+                .categoryId(getCategoryIdFromRepo("Напиток"))
                 .build();
         ProductDto product5 = ProductDto.builder()
                 .name("Молочный коктейль")
                 .description("Из пастеризованного молока")
                 .price(80L)
-                .categoryId(4L)
+                .categoryId(getCategoryIdFromRepo("Напиток"))
                 .build();
         ProductDto product6 = ProductDto.builder()
                 .name("Огурец")
                 .description("Молодец")
                 .price(15L)
-                .categoryId(2L)
+                .categoryId(getCategoryIdFromRepo("Овощи"))
                 .build();
         ProductDto product7 = ProductDto.builder()
                 .name("Гвозди")
                 .description("Не жаренные")
                 .price(90L)
-                .categoryId(3L)
+                .categoryId(getCategoryIdFromRepo("Инструменты"))
                 .build();
         ProductDto product8 = ProductDto.builder()
                 .name("Банан")
                 .description("Обычный банан")
                 .price(18L)
-                .categoryId(1L)
+                .categoryId(getCategoryIdFromRepo("Фрукты"))
                 .build();
         productService.add(product1);
         productService.add(product2);
@@ -94,6 +98,9 @@ public class TestDataLoader implements CommandLineRunner {
         productService.add(product6);
         productService.add(product7);
         productService.add(product8);
+    }
 
+    private Long getCategoryIdFromRepo(String name){
+       return categoryRepo.findByName(name).orElseThrow().getId();
     }
 }

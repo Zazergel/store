@@ -6,7 +6,6 @@ import com.zazergel.category.model.Category;
 import com.zazergel.category.repository.CategoryRepo;
 import com.zazergel.exception.BadRequestException;
 import com.zazergel.exception.NotFoundException;
-import com.zazergel.product.repository.ProductRepo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -23,7 +22,6 @@ import java.util.Optional;
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepo categoryRepo;
-    private final ProductRepo productRepo;
     private final CategoryMapper categoryMapper;
 
     @Override
@@ -67,6 +65,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional
     public void delete(Long id) {
         log.info("Удаление категории с id {}.", id);
+        getCategoryById(id);
         categoryRepo.deleteById(id);
     }
 
