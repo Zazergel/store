@@ -16,7 +16,12 @@ import java.time.LocalDateTime;
 @Setter
 public class Comment {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(generator = "comment_generator")
+    @SequenceGenerator(
+            name = "comment_generator",
+            sequenceName = "comment_seq",
+            allocationSize = 1
+    )
     Long id;
 
     @Column(nullable = false)

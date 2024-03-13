@@ -18,7 +18,12 @@ import java.util.List;
 @Setter
 public class Product {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(generator = "product_generator")
+    @SequenceGenerator(
+            name = "product_generator",
+            sequenceName = "category_seq",
+            allocationSize = 1
+    )
     Long id;
 
     @Column(nullable = false)
